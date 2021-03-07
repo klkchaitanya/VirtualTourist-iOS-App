@@ -39,7 +39,7 @@
 		D3F1ABCF25EFE9160009EBBC /* PhotoAlbumViewController+NSFetchResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoAlbumViewController+NSFetchResultsController.swift"; sourceTree = "<group>"; };
 		D3F1ABD125EFF10A0009EBBC /* PhotoAlbumViewController+MKMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoAlbumViewController+MKMapView.swift"; sourceTree = "<group>"; };
 		D3FD55D025EDB28A003BF666 /* PhotoAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumViewController.swift; sourceTree = "<group>"; };
-		D3FD55D225EDB80C003BF666 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PhotoCollectionViewCell.swift; path = "View Controller/PhotoCollectionViewCell.swift"; sourceTree = "<group>"; };
+		D3FD55D225EDB80C003BF666 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +61,8 @@
 				D38703BA25EF4DED00A088A0 /* PhotoAlbumViewController+CollectionView.swift */,
 				D3F1ABCF25EFE9160009EBBC /* PhotoAlbumViewController+NSFetchResultsController.swift */,
 				D3F1ABD125EFF10A0009EBBC /* PhotoAlbumViewController+MKMapView.swift */,
+				D3FD55D225EDB80C003BF666 /* PhotoCollectionViewCell.swift */,
+				D38703B825EE949100A088A0 /* DataController.swift */,
 			);
 			path = "View Controller";
 			sourceTree = "<group>";
@@ -109,8 +111,6 @@
 				D3C0361025EA157100C5F4FA /* AppDelegate.swift */,
 				D37E1B5725EC2C7E0016146B /* Model */,
 				D37395F125F3E23A00FF7A3D /* View Controller */,
-				D38703B825EE949100A088A0 /* DataController.swift */,
-				D3FD55D225EDB80C003BF666 /* PhotoCollectionViewCell.swift */,
 			);
 			path = VirtualTourist;
 			sourceTree = "<group>";

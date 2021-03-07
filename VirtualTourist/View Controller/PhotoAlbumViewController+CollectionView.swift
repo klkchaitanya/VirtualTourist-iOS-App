@@ -35,13 +35,9 @@ extension PhotoAlbumViewController: UICollectionViewDataSource, UICollectionView
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let count = fetchedResultsController.sections?[section].numberOfObjects ?? 0
         if(count == 0){
-            let label: UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: collectionView.frame.width, height: collectionView.frame.height))
-            label.numberOfLines = 1
-            label.textAlignment = .center
-            label.text = "No Images found!"
-            collectionView.backgroundView = label
+            updateBackgroundView(enable: true, text: backgroundText)
         }else{
-            collectionView.backgroundView = nil
+            updateBackgroundView(enable: false, text: "")
         }
         
         return count
@@ -63,7 +59,6 @@ extension PhotoAlbumViewController: UICollectionViewDataSource, UICollectionView
         let photo = self.fetchedResultsController.object(at: indexPath)
         if photo.photoData == nil {
             //print(FUNC_TAG, "photo.photoData is nil")
-            //newCollectionButton.isEnabled = false
             DispatchQueue.global(qos: .background).async {
                 if let imageData = try? Data(contentsOf: photo.photoUrl!) {
                     DispatchQueue.main.async {
@@ -76,7 +71,6 @@ extension PhotoAlbumViewController: UICollectionViewDataSource, UICollectionView
                         }
                         
                         let image = UIImage(data: imageData)!
-                        cell.setImageView(image: image)
                         cell.photoCollectionViewCellActivityIndicator.startAnimating()
                         cell.photoCollectionViewCellActivityIndicator.isHidden = false
                         
@@ -93,7 +87,6 @@ extension PhotoAlbumViewController: UICollectionViewDataSource, UICollectionView
                 cell.photoCollectionViewCellActivityIndicator.isHidden = true
             }
         }
-        //newCollectionButton.isEnabled = true
         return cell
     }
     

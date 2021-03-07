@@ -26,8 +26,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //resetMapView()
-        resetMapView2()
+        resetMapView()
     }
     
     func setupPinFetchedResultsController(){
@@ -45,47 +44,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         }
     }
     
-    
-    func resetMapView() {
-        var FUNC_TAG = "resetMapView"
-        print(TAG, FUNC_TAG)
+    func resetMapView(){
+        let FUNC_TAG = "resetMapView"
         
+        // Remove all existing annotations.
         self.mapView.removeAnnotations(self.mapView.annotations)
         
-        // fetch all pins
-        let request: NSFetchRequest<Pin> = Pin.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
-        request.sortDescriptors = [sortDescriptor]
-        
-        dataController.viewContext.perform {
-            do {
-            let pins = try self.dataController.viewContext.fetch(request)
-            for p in pins{
-                print(p.name, " ", p.creationDate, " ", p.latitude, " ", p.latitude)
-                self.mapView.addAnnotation(AnnotationPin(pin: p))
-                }
-            //self.mapView.addAnnotations(pins.map { pin in AnnotationPin(pin: pin) })
-            }
-            catch {
-                print("Error fetching Pins: \(error)")
-            }
-        }
-        
-        //TEST Fetching all photos and their count...
-        let fetchRequestTemp:NSFetchRequest<Photo> = Photo.fetchRequest()
-        do {
-            let allPhotos = try self.dataController.viewContext.fetch(fetchRequestTemp)
-            print(TAG, FUNC_TAG, " Total photos in db: ", allPhotos.count)
-        }
-        catch {
-            print(TAG, FUNC_TAG, " Error fetching all photos: \(error)")
-        }
-    }
-    
-    func resetMapView2(){
-        self.mapView.removeAnnotations(self.mapView.annotations)
-        
-        // fetch all pins
+        // Fetch all pins
         let request: NSFetchRequest<Pin> = Pin.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
         request.sortDescriptors = [sortDescriptor]
@@ -96,11 +61,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         }
         
         let pins = pinFetchedResultsController.fetchedObjects!
+        print(TAG, FUNC_TAG, " Number of pins fetched: ", pins.count)
+        // Add all fetched pins to Map
         for p in pins{
             print(p.name, " ", p.creationDate, " ", p.latitude, " ", p.latitude)
             self.mapView.addAnnotation(AnnotationPin(pin: p))
         }
-        
     }
     
     //on Long press
@@ -146,8 +112,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         }
         if let annotation = view.annotation as? MKPointAnnotation {
             do {
-                //                let predicate = NSPredicate(format: "longitude = %@ AND latitude = %@", argumentArray: [annotation.coordinate.longitude, annotation.coordinate.latitude])
-                
                 let latitudePredicate = NSPredicate(format: "latitude == %lf", annotation.coordinate.latitude)
                 let longitudePredicate = NSPredicate(format: "longitude == %lf", annotation.coordinate.longitude)
                 let namePredicate = NSPredicate(format: "name == %@", annotation.title!)
@@ -157,7 +121,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
                 let pinData = try dataController.fetchLocation(predicates)!
                 print("Pin Query result: ", pinData.name)
                 let annotationPin = AnnotationPin(pin: pinData)
-                
+    
                 self.performSegue(withIdentifier: "MapToAlbumSegue", sender: annotationPin)
             } catch {
                 print("There was an error fetching the location pin and calling Album view!!")

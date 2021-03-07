@@ -23,6 +23,8 @@ class PhotoAlbumViewController: UIViewController{
     @IBOutlet weak var photoCollectionViewActivityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var navigationBar: UINavigationBar!
     
+    var backgroundText = "No images found!"
+    
     var TAG = "PhotoAlbumViewController"
     
 
@@ -37,7 +39,6 @@ class PhotoAlbumViewController: UIViewController{
         }
         
         print(TAG, FUNC_TAG, "Pin:" , pin)
-        updateUI(enabled: false)
         setupCollectionView()
         setupFetchedResultsController()
 
@@ -61,15 +62,14 @@ class PhotoAlbumViewController: UIViewController{
         print(TAG, FUNC_TAG, " Fetching photos of pin location: "+pin.name!)
         
         //TEST Fetching all photos and their count...
-        let fetchRequestTemp:NSFetchRequest<Photo> = Photo.fetchRequest()
-        do {
-            let allPhotos = try self.dataController.viewContext.fetch(fetchRequestTemp)
-            //print("Total photos in db: ", allPhotos.count)
-        }
-        catch {
-            print("Error fetching all photos: \(error)")
-        }
-        
+//        let fetchRequestTemp:NSFetchRequest<Photo> = Photo.fetchRequest()
+//        do {
+//            let allPhotos = try self.dataController.viewContext.fetch(fetchRequestTemp)
+//            //print("Total photos in db: ", allPhotos.count)
+//        }
+//        catch {
+//            print("Error fetching all photos: \(error)")
+//        }
         
         let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
         
@@ -95,8 +95,7 @@ class PhotoAlbumViewController: UIViewController{
         guard (fetchedResultsController.fetchedObjects?.isEmpty)! else {
             //photoCollectionViewActivityIndicator.isHidden = true
             //photoCollectionViewActivityIndicator.stopAnimating()
-            photoCollectionView.backgroundView = nil
-            updateUI(enabled: true)
+            //photoCollectionView.backgroundView = nil
             print(FUNC_TAG, "Images already exist in database. Not re-downloading from Flickr")
             return
         }
@@ -107,9 +106,6 @@ class PhotoAlbumViewController: UIViewController{
 
     func getPhotosFromFilckr(latitude: Double, longitude: Double){
         let FUNC_TAG = "getPhotosFromFilckr"
-        
-        //activityIndicator.isHidden = false
-        //activityIndicator.startAnimating()
         
         let pagesCount = Int(self.pin.pages)
         FlickrClient.getPhotos(latitude: latitude, longitude: longitude, pageCount: pagesCount){
@@ -138,14 +134,16 @@ class PhotoAlbumViewController: UIViewController{
                 print(error)
             }
         }
-        updateUI(enabled: true)
+        backgroundText = "No images found!"
+        updateUI(newCollectionButtonStatus: true)
     }
     
     @IBAction func clearDBAndLoadNewImages(_ sender: Any) {
         let FUNC_TAG = "clearDBAndLoadNewImages"
         print(FUNC_TAG)
         
-        updateUI(enabled: false)
+        backgroundText = "Downloading images..Please wait!"
+        updateUI(newCollectionButtonStatus: false)
         guard let images = fetchedResultsController.fetchedObjects else { return }
         if(images.count>0){
         for image in images {
@@ -173,14 +171,20 @@ class PhotoAlbumViewController: UIViewController{
         present(alertVC, animated: true, completion: nil)
     }
     
-    func updateUI(enabled: Bool){
-        newCollectionButton.isEnabled = enabled
-        
-        let label: UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: photoCollectionView.frame.width, height: photoCollectionView.frame.height))
-        label.numberOfLines = 1
-        label.textAlignment = .center
-        label.text = "Downloading images..Please wait!"
-        photoCollectionView.backgroundView = label
+    func updateUI( newCollectionButtonStatus: Bool){
+        newCollectionButton.isEnabled = newCollectionButtonStatus
+    }
+    
+    func updateBackgroundView(enable: Bool, text: String){
+        if(enable){
+            let label: UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: photoCollectionView.frame.width, height: photoCollectionView.frame.height))
+            label.numberOfLines = 2
+            label.textAlignment = .center
+            label.text = text
+            photoCollectionView.backgroundView = label
+        }else{
+            photoCollectionView.backgroundView = nil
+        }
     }
     
 

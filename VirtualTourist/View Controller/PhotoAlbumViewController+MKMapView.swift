@@ -30,26 +30,4 @@ extension PhotoAlbumViewController: MKMapViewDelegate{
         }
     }
     
-    
-//    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-//        let reuseId = "pin"
-//        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
-//        
-//        
-//        if pinView == nil {
-//            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-//            pinView!.canShowCallout = false
-//            pinView!.pinTintColor = .red
-//            
-//        } else {
-//            pinView!.annotation = annotation
-//        }
-//        
-//        pinView?.isSelected = true
-//        pinView?.isUserInteractionEnabled = false
-//        return pinView
-//    }
-    
-
-    
 }

@@ -31,46 +31,15 @@ class DataController{
         }
     }
     
-//    func fetchLocation(_ predicate: NSPredicate, sorting: NSSortDescriptor? = nil) throws -> Pin? {
-//        let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Pin")
-//        fr.predicate = predicate
-//        if let sorting = sorting {
-//            fr.sortDescriptors = [sorting]
-//        }
-//        guard let location = (try viewContext.fetch(fr) as! [Pin]).first else {
-//            return nil
-//        }
-//        return location
-//    }
     
     func save() throws {
         if viewContext.hasChanges {
             try viewContext.save()
         }
     }
-}
-
-extension DataController {
-    func autoSaveViewContext(interval:TimeInterval = 30) {
-        print("autosaving")
-        
-        guard interval > 0 else {
-            print("cannot set negative autosave interval")
-            return
-        }
-        
-        if viewContext.hasChanges {
-            try? viewContext.save()
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
-            self.autoSaveViewContext(interval: interval)
-        }
-    }
-}
-
-
-extension DataController {
+    
+    
+    
     func fetchLocation(_ predicate: NSPredicate, sorting: NSSortDescriptor? = nil) throws -> Pin? {
         let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Pin")
         fr.predicate = predicate
